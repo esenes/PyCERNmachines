@@ -1,5 +1,3 @@
-import numpy as np
-
 class SPSOctupoles(object):
 
     def __init__(self, optics='Q20'):
