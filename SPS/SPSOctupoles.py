@@ -24,11 +24,11 @@ class SPSOctupoles(object):
                 'd_q2x_f': 390.7589796,
                 'd_q2y_f': -93.41756217,
                 'd_q2x_d': 25.02161632,
-                'd_q2y_d': -104.1276824 }        
+                'd_q2y_d': -104.1276824 }
         else:
             raise ValueError("Optics %s unknown! Use either 'Q20' or 'Q26'."%
                              optics)
-            
+
     def get_anharmonicities(self, KLOF, KLOD):
         axx = self.coeffs['daxx_f'] * KLOF + self.coeffs['daxx_d'] * KLOD
         axy = self.coeffs['daxy_f'] * KLOF + self.coeffs['daxy_d'] * KLOD
@@ -48,3 +48,21 @@ class SPSOctupoles(object):
         q1y_fd = q2y * dp_offset
 
         return q1x_fd, q1y_fd
+
+    def apply_to_machine(self, machine, KLOF, KLOD, dp_offset):
+            q1x_fd, q1y_fd = self.get_q1_feeddown(KLOF, KLOD, dp_offset)
+            machine.Qp_x[0] += q1x_fd
+            machine.Qp_y[0] += q1y_fd
+
+            q2x, q2y = self.get_q2(KLOF, KLOD)
+            try:
+                machine.Qp_x[1] += q2x
+                machine.Qp_y[1] += q2y
+            except IndexError:
+                machine.Qp_x += [ q2x ]
+                machine.Qp_y += [ q2y ]
+
+            axx, axy, ayy = self.get_anharmonicities(KLOF, KLOD)
+            machine.app_x += axx
+            machine.app_y += ayy
+            machine.app_xy += axy

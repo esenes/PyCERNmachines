@@ -55,7 +55,7 @@ class SPS(synchrotron):
             self.longitudinal_focusing = 'non-linear'
 
             self.add_effect_of_octupoles(kwargs, optics='Q20')
-            
+
         elif self.machine_configuration =='Q26-injection':
             self.charge = e
             self.mass = m_p
@@ -137,24 +137,7 @@ class SPS(synchrotron):
             KLOF = kwargs['octupole_settings_dict']['KLOF']
             KLOD = kwargs['octupole_settings_dict']['KLOD']
             dp_offset = kwargs['octupole_settings_dict']['dp_offset']
-
-            q1x_fd, q1y_fd = octupoles.get_q1_feeddown(
-                KLOF, KLOD, dp_offset)
-            self.Qp_x[0] += q1x_fd
-            self.Qp_y[0] += q1y_fd
-
-            q2x, q2y = octupoles.get_q2(KLOF, KLOD)
-            try:
-                self.Qp_x[1] += q2x
-                self.Qp_y[1] += q2y
-            except IndexError:
-                self.Qp_x += [ q2x ]
-                self.Qp_y += [ q2y ]
-
-            axx, axy, ayy = octupoles.get_anharmonicities(KLOF, KLOD)
-            self.app_x += axx
-            self.app_y += ayy
-            self.app_xy += axy
+            octupoles.apply_to_machine(self, KLOF, KLOD, dp_offset)
 
 
 class HLLHC(synchrotron):
