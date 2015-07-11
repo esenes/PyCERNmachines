@@ -50,6 +50,7 @@ class Synchrotron(Element):
         for insert_before, si in enumerate(self.s):
             if si > 0.5 * self.circumference:
                 break
+        insert_before -= 1
         n_segments = len(self.transverse_map)
         self.create_longitudinal_map(insert_before)
         self.one_turn_map.insert(insert_before, self.longitudinal_map)
