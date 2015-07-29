@@ -331,10 +331,10 @@ class LHC(Synchrotron):
 
             self.longitudinal_focusing = 'non-linear'
 
-        i_focusing = kwargs.pop('i_focussing', False)
-        i_defocusing = kwargs.pop('i_defocussing', False)
-        if i_focusing or i_defocusing is False:
-            print '\n\n--> Powering LHC octupoles to {:g} A.\n\n'.format(i_focusing)
+        i_focusing = kwargs.pop('i_focusing', False)
+        i_defocusing = kwargs.pop('i_defocusing', False)
+        if i_focusing or i_defocusing is True:
+            print '\n--> Powering LHC octupoles to {:g} A.\n'.format(i_focusing)
             self.app_x, self.app_y, self.app_xy = self.get_anharmonicities_from_octupole_currents_LHC(
                 i_focusing, i_defocusing)
 
@@ -435,10 +435,10 @@ class HLLHC(Synchrotron):
 
             self.longitudinal_focusing = 'non-linear'
 
-        i_focusing = kwargs.pop('i_focussing', False)
-        i_defocusing = kwargs.pop('i_defocussing', False)
-        if i_focusing or i_defocusing is False:
-            print '\n\n--> Powering LHC octupoles to {:g} A.\n\n'.format(i_focusing)
+        i_focusing = kwargs.pop('i_focusing', False)
+        i_defocusing = kwargs.pop('i_defocusing', False)
+        if i_focusing or i_defocusing is True:
+            print '\n--> Powering LHC octupoles to {:g} A.\n'.format(i_focusing)
             self.app_x, self.app_y, self.app_xy = self.get_anharmonicities_from_octupole_currents_LHC(
                 i_focusing, i_defocusing)
 
