@@ -32,8 +32,8 @@ class PSB(Synchrotron):
             self.Q_x     = 4.23
             self.Q_y     = 4.37
 
-            self.Qp_x    = -1*self.Q_x
-            self.Qp_y    = -2*self.Q_y
+            self.Qp_x    = [-1*self.Q_x]
+            self.Qp_y    = [-2*self.Q_y]
 
             self.app_x   = 0.0000e-9
             self.app_y   = 0.0000e-9
@@ -66,8 +66,8 @@ class PSB(Synchrotron):
             self.Q_x     = 4.23
             self.Q_y     = 4.37
 
-            self.Qp_x    = -1*self.Q_x
-            self.Qp_y    = -2*self.Q_y
+            self.Qp_x    = [-1*self.Q_x]
+            self.Qp_y    = [-2*self.Q_y]
 
             self.app_x   = 0.0000e-9
             self.app_y   = 0.0000e-9
@@ -100,8 +100,8 @@ class PSB(Synchrotron):
             self.Q_x     = 4.23
             self.Q_y     = 4.37
 
-            self.Qp_x    = -1*self.Q_x
-            self.Qp_y    = -2*self.Q_y
+            self.Qp_x    = [-1*self.Q_x]
+            self.Qp_y    = [-2*self.Q_y]
 
             self.app_x   = 0.0000e-9
             self.app_y   = 0.0000e-9
