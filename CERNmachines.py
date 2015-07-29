@@ -331,7 +331,57 @@ class LHC(Synchrotron):
 
             self.longitudinal_focusing = 'non-linear'
 
+        i_focusing = kwargs.pop('i_focussing', False)
+        i_defocusing = kwargs.pop('i_defocussing', False)
+        if i_focusing or i_defocusing is False:
+            print '\n\n--> Powering LHC octupoles to {:g} A.\n\n'.format(i_focusing)
+            self.app_x, self.app_y, self.app_xy = self.get_anharmonicities_from_octupole_currents_LHC(
+                i_focusing, i_defocusing)
+
         super(LHC, self).__init__(*args, **kwargs)
+
+    def get_anharmonicities_from_octupole_currents_LHC(cls, i_focusing, i_defocusing):
+        """Calculate the constants of proportionality app_x, app_y and
+        app_xy (== app_yx) for the amplitude detuning introduced by the
+        LHC octupole magnets (aka. LHC Landau octupoles) from the
+        electric currents i_focusing [A] and i_defocusing [A] flowing
+        through the magnets. The maximum current is given by
+        i_max = +/- 550 [A]. The values app_x, app_y, app_xy obtained
+        from the formulae are proportional to the strength of detuning
+        for one complete turn around the accelerator, i.e. one-turn
+        values.
+
+        The calculation is based on formulae (3.6) taken from 'The LHC
+        transverse coupled-bunch instability' by N. Mounet, EPFL PhD
+        Thesis, 2012. Values (hard-coded numbers below) are valid for
+        LHC Landau octupoles before LS1. Beta functions in x and y are
+        correctly taken into account. Note that here, the values of
+        app_x, app_y and app_xy are not normalized to the reference
+        momentum p0. This is done only during the calculation of the
+        detuning in the corresponding detune method of the
+        AmplitudeDetuningSegment.
+
+        More detailed explanations and references on how the formulae
+        were obtained are given in the PhD thesis (pg. 85ff) cited
+        above.
+        """
+        i_max = 550.  # [A]
+        E_max = 7000. # [GeV]
+
+        app_x  = E_max * (267065. * i_focusing / i_max -
+            7856. * i_defocusing / i_max)
+        app_y  = E_max * (9789. * i_focusing / i_max -
+            277203. * i_defocusing / i_max)
+        app_xy = E_max * (-102261. * i_focusing / i_max +
+            93331. * i_defocusing / i_max)
+
+        # Convert to SI units.
+        convert_to_SI = e / (1.e-9 * c)
+        app_x *= convert_to_SI
+        app_y *= convert_to_SI
+        app_xy *= convert_to_SI
+
+        return app_x, app_y, app_xy
 
 
 class HLLHC(Synchrotron):
@@ -385,4 +435,54 @@ class HLLHC(Synchrotron):
 
             self.longitudinal_focusing = 'non-linear'
 
+        i_focusing = kwargs.pop('i_focussing', False)
+        i_defocusing = kwargs.pop('i_defocussing', False)
+        if i_focusing or i_defocusing is False:
+            print '\n\n--> Powering LHC octupoles to {:g} A.\n\n'.format(i_focusing)
+            self.app_x, self.app_y, self.app_xy = self.get_anharmonicities_from_octupole_currents_LHC(
+                i_focusing, i_defocusing)
+
         super(HLLHC, self).__init__(*args, **kwargs)
+
+    def get_anharmonicities_from_octupole_currents_LHC(cls, i_focusing, i_defocusing):
+        """Calculate the constants of proportionality app_x, app_y and
+        app_xy (== app_yx) for the amplitude detuning introduced by the
+        LHC octupole magnets (aka. LHC Landau octupoles) from the
+        electric currents i_focusing [A] and i_defocusing [A] flowing
+        through the magnets. The maximum current is given by
+        i_max = +/- 550 [A]. The values app_x, app_y, app_xy obtained
+        from the formulae are proportional to the strength of detuning
+        for one complete turn around the accelerator, i.e. one-turn
+        values.
+
+        The calculation is based on formulae (3.6) taken from 'The LHC
+        transverse coupled-bunch instability' by N. Mounet, EPFL PhD
+        Thesis, 2012. Values (hard-coded numbers below) are valid for
+        LHC Landau octupoles before LS1. Beta functions in x and y are
+        correctly taken into account. Note that here, the values of
+        app_x, app_y and app_xy are not normalized to the reference
+        momentum p0. This is done only during the calculation of the
+        detuning in the corresponding detune method of the
+        AmplitudeDetuningSegment.
+
+        More detailed explanations and references on how the formulae
+        were obtained are given in the PhD thesis (pg. 85ff) cited
+        above.
+        """
+        i_max = 550.  # [A]
+        E_max = 7000. # [GeV]
+
+        app_x  = E_max * (267065. * i_focusing / i_max -
+            7856. * i_defocusing / i_max)
+        app_y  = E_max * (9789. * i_focusing / i_max -
+            277203. * i_defocusing / i_max)
+        app_xy = E_max * (-102261. * i_focusing / i_max +
+            93331. * i_defocusing / i_max)
+
+        # Convert to SI units.
+        convert_to_SI = e / (1.e-9 * c)
+        app_x *= convert_to_SI
+        app_y *= convert_to_SI
+        app_xy *= convert_to_SI
+
+        return app_x, app_y, app_xy
