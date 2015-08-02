@@ -25,7 +25,7 @@ class Synchrotron(Element):
         '''
         Currently (because the RFSystems tracking uses a Verlet
         velocity integrator) the RFSystems element will be installed at
-        s == circumference/2, which is correct for the smooth
+        s == circumference/2, which is correct for the smoothip
         approximation.
         '''
         self.chromaticity_on = kwargs.pop('chromaticity_on', True)
@@ -107,10 +107,16 @@ class Synchrotron(Element):
 
     @property
     def Q_s(self):
-        if self.p_increment!=0 or self.dphi1!=0:
-            raise ValueError('Formula not valid in this case!!!!')
-        return np.sqrt( e*np.abs(self.eta)*(self.h1*self.V1 + self.h2*self.V2)
-                        / (2*np.pi*self.p0*self.beta*c) )
+        if hasattr(self, '_Q_s'):
+            return self._Q_s
+        else:
+            if self.p_increment!=0 or self.dphi1!=0:
+                raise ValueError('Formula not valid in this case!!!!')
+            return np.sqrt( e*np.abs(self.eta)*(self.h1*self.V1 + self.h2*self.V2)
+                            / (2*np.pi*self.p0*self.beta*c) )
+    @Q_s.setter
+    def Q_s(self, value):
+        self._Q_s = value
 
     @property
     def beta_z(self):
