@@ -298,7 +298,8 @@ class SPS(Synchrotron):
             self.longitudinal_focusing = 'non-linear'
 
         else:
-            raise ValueError('ERROR: unknown machine configuration', machine_configuration)
+            raise ValueError('ERROR: unknown machine configuration',
+                             machine_configuration)
 
         super(SPS, self).__init__(*args, **kwargs)
 
@@ -380,7 +381,7 @@ class LHC(Synchrotron):
             self.alpha       = 3.225e-4
             self.h1          = 35640
             self.h2          = 71280
-            self.V1          = 16e6
+            self.V1          = 10e6
             self.V2          = 0
             self.dphi1       = 0
             self.dphi2       = np.pi
