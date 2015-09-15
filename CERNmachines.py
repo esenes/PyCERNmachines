@@ -130,6 +130,63 @@ class PSB(Synchrotron):
         super(PSB, self).__init__(*args, **kwargs)
 
 
+class PS(Synchrotron):
+
+    def __init__(self, *args, **kwargs):
+        self.n_segments = kwargs['n_segments']
+        self.gamma = kwargs['gamma'] #this should set also self.beta
+        machine_configuration = kwargs.get('machine_configuration', 'LHCbeam_h7')
+        self.circumference = 100*2*np.pi
+        self.s = np.arange(0, self.n_segments + 1) * self.circumference / self.n_segments
+        if machine_configuration == 'LHCbeam_h7':
+            self.alpha_x        = 0 * np.ones(self.n_segments)
+            self.beta_x         = 16 * np.ones(self.n_segments)
+            self.D_x            = 0 * np.ones(self.n_segments)
+            self.alpha_y        = 0 * np.ones(self.n_segments)
+            self.beta_y         = 16 * np.ones(self.n_segments)
+            self.D_y            = 0 * np.ones(self.n_segments)
+            self.Q_x            = 6.27
+            self.Q_y            = 6.23
+            self.Qp_x           = 0
+            self.Qp_y           = 0
+            self.app_x          = 0.0000e-9
+            self.app_y          = 0.0000e-9
+            self.app_xy         = 0
+            self.alpha     = 0.027
+            self.h1, self.h2       = 7, 0
+            self.V1, self.V2       = 24e3, 0
+            self.dphi1, self.dphi2 = 0, 0
+            self.p_increment       = 0 * e/c * self.circumference/(self.beta*c)
+        elif machine_configuration =='TOFbeam_transition':
+            self.alpha_x        = 0 * np.ones(self.n_segments)
+            self.beta_x         = 16 * np.ones(self.n_segments)
+            self.D_x            = 0 * np.ones(self.n_segments)
+            self.alpha_y        = 0 * np.ones(self.n_segments)
+            self.beta_y         = 16 * np.ones(self.n_segments)
+            self.D_y            = 0 * np.ones(self.n_segments)
+
+            self.Q_x            = 6.27
+            self.Q_y            = 6.23
+
+            self.Qp_x           = 0
+            self.Qp_y           = 0
+
+            self.app_x          = 0.0000e-9
+            self.app_y          = 0.0000e-9
+            self.app_xy         = 0
+
+            self.alpha     = 0.027
+
+            self.h1, self.h2       = 8, 8
+            self.V1, self.V2       = 0.2e6, 0
+            self.dphi1, self.dphi2 = np.pi, np.pi
+            self.p_increment       = 46e9 * e/c * self.circumference/(self.beta*c)
+
+        else:
+            raise ValueError('ERROR: unknown machine configuration', machine_configuration)
+        super(PS, self).__init__(*args, **kwargs)
+
+
 class SPS(Synchrotron):
 
     def __init__(self, *args, **kwargs):
