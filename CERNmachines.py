@@ -297,11 +297,11 @@ class LHC(Synchrotron):
 
             self.longitudinal_focusing = 'non-linear'
 
-        elif self.machine_configuration == '7TeV':
+        elif self.machine_configuration == '6.5TeV':
             self.charge = e
             self.mass = m_p
 
-            self.gamma = np.sqrt( (7000e9*e/(self.mass*c**2))**2 + 1 )
+            self.gamma = np.sqrt( (6500e9*e/(self.mass*c**2))**2 + 1 )
 
             self.Q_x     = 64.31
             self.Q_y     = 59.32
