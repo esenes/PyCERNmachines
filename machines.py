@@ -192,7 +192,7 @@ class Synchrotron(Element):
         epsy_geo = epsn_y/self.betagamma
 
         bunch = gen.ParticleGenerator(macroparticlenumber=n_macroparticles,
-            intensity=intensity, charge=self.charge, mass=self.mass,
+                intensity=intensity, charge=self.charge, mass=self.mass,
                 circumference=self.circumference, gamma=self.gamma,
                 distribution_x=gen.gaussian2D(epsx_geo),
                 alpha_x=self.alpha_x[0], beta_x=self.beta_x[0], D_x=self.D_x[0],
