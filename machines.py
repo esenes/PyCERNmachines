@@ -192,20 +192,16 @@ class Synchrotron(Element):
         epsy_geo = epsn_y/self.betagamma
 
         bunch = gen.ParticleGenerator(macroparticlenumber=n_macroparticles,
-                intensity=intensity, charge=self.charge, mass=self.mass,
+            intensity=intensity, charge=self.charge, mass=self.mass,
                 circumference=self.circumference, gamma=self.gamma,
                 distribution_x=gen.gaussian2D(epsx_geo),
+                alpha_x=self.alpha_x[0], beta_x=self.beta_x[0], D_x=self.D_x[0],
                 distribution_y=gen.gaussian2D(epsy_geo),
+                alpha_y=self.alpha_y[0], beta_y=self.beta_y[0], D_y=self.D_y[0],
                 distribution_z=gen.cut_distribution(
                     gen.gaussian2D_asymmetrical(
                         sigma_u=sigma_z, sigma_up=sigma_dp),
-                    is_accepted=check_inside_bucket),
-                linear_matcher_x=gen.transverse_linear_matcher(
-                    alpha=self.alpha_x[0], beta=self.beta_x[0],
-                    dispersion=self.D_x[0]),
-                linear_matcher_y=gen.transverse_linear_matcher(
-                    alpha=self.alpha_y[0], beta=self.beta_y[0],
-                    dispersion=self.D_y[0])
+                    is_accepted=check_inside_bucket)
                 ).generate()
 
         return bunch
@@ -232,17 +228,12 @@ class Synchrotron(Element):
                 intensity=intensity, charge=self.charge, mass=self.mass,
                 circumference=self.circumference, gamma=self.gamma,
                 distribution_x=gen.gaussian2D(epsx_geo),
+                alpha_x=self.alpha_x[0], beta_x=self.beta_x[0], D_x=self.D_x[0],
                 distribution_y=gen.gaussian2D(epsy_geo),
+                alpha_y=self.alpha_y[0], beta_y=self.beta_y[0], D_y=self.D_y[0],
                 distribution_z=gen.RF_bucket_distribution(
                     rfbucket=self.longitudinal_map.get_bucket(gamma=self.gamma),
-                    sigma_z=sigma_z, epsn_z=epsn_z),
-                linear_matcher_x=gen.transverse_linear_matcher(
-                    alpha=self.alpha_x[0], beta=self.beta_x[0],
-                    dispersion=self.D_x[0]),
-                linear_matcher_y=gen.transverse_linear_matcher(
-                    alpha=self.alpha_y[0], beta=self.beta_y[0],
-                    dispersion=self.D_y[0])
+                    sigma_z=sigma_z, epsn_z=epsn_z)
                 ).generate()
 
         return bunch
-
