@@ -17,6 +17,7 @@ except ImportError as e:
     from PyHEADTAIL.trackers.transverse_tracking import TransverseMap
     from PyHEADTAIL.trackers.detuners import Chromaticity, AmplitudeDetuning
 from PyHEADTAIL.trackers.simple_long_tracking import LinearMap, RFSystems
+from PyHEADTAIL.trackers.wrapper import LongWrapper
 
 
 class Synchrotron(Element):
@@ -28,8 +29,10 @@ class Synchrotron(Element):
         s == circumference/2, which is correct for the smoothip
         approximation.
         '''
+        
         self.chromaticity_on = kwargs.pop('chromaticity_on', True)
         self.amplitude_detuning_on = kwargs.pop('amplitude_detuning_on', True)
+        self.wrap_z = kwargs.pop('wrap_z', True)
 
         if not hasattr(self, 'longitudinal_focusing'):
             self.longitudinal_focusing = kwargs.pop('longitudinal_focusing')
@@ -60,6 +63,19 @@ class Synchrotron(Element):
         n_segments = len(self.transverse_map)
         self.create_longitudinal_map(insert_before)
         self.one_turn_map.insert(insert_before, self.longitudinal_map)
+        
+        #add long wrapper and buncher
+        if self.wrap_z:
+            if self.longitudinal_focusing in ['linear']:
+                raise ValueError('Not implemented!!!!')
+            
+            bucket = self.longitudinal_map.get_bucket(gamma=self.gamma)
+            bucket_length = self.circumference/self.h1
+            z_beam_center = bucket.z_ufp_separatrix+bucket_length-self.circumference/2.
+            self.z_wrapper = LongWrapper(circumference=self.circumference, z0=z_beam_center)
+            self.one_turn_map.append(self.z_wrapper)
+            from PyHEADTAIL.particles.slicing import UniformBinSlicer
+            self.buncher = UniformBinSlicer(self.h1,z_cuts=(self.z_wrapper.z_min,  self.z_wrapper.z_max))
 
     def install_after_each_transverse_segment(self, element_to_add):
         '''Attention: Do not add any elements which update the dispersion!'''
