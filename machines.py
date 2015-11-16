@@ -33,7 +33,7 @@ class Synchrotron(Element):
 
         if not hasattr(self, 'longitudinal_focusing'):
             self.longitudinal_focusing = kwargs.pop('longitudinal_focusing')
-        if self.longitudinal_focusing not in ['linear', 'non-linear']:
+        if self.longitudinal_focusing not in ['linear', 'non-linear', 'none']:
             raise ValueError('longitudinal_focusing not recognized!!!')
 
         for attr in kwargs.keys():
@@ -49,16 +49,19 @@ class Synchrotron(Element):
         # s = circumference/2
         self.one_turn_map = []
         for m in self.transverse_map:
+	
             self.one_turn_map.append(m)
 
         # compute the index of the element before which to insert
         # the longitudinal map
-        for insert_before, si in enumerate(self.s):
-            if si > 0.5 * self.circumference:
-                break
-        n_segments = len(self.transverse_map)
-        self.create_longitudinal_map(insert_before)
-        self.one_turn_map.insert(insert_before, self.longitudinal_map)
+        if self.longitudinal_focusing is not 'none':
+            print self.longitudinal_focusing
+            for insert_before, si in enumerate(self.s):
+                if si > 0.5 * self.circumference:
+                    break
+            n_segments = len(self.transverse_map)
+            self.create_longitudinal_map(insert_before)
+            self.one_turn_map.insert(insert_before, self.longitudinal_map)
 
     def install_after_each_transverse_segment(self, element_to_add):
         '''Attention: Do not add any elements which update the dispersion!'''
@@ -140,6 +143,17 @@ class Synchrotron(Element):
             self.alpha_x, self.beta_x, self.D_x,
             self.alpha_y, self.beta_y, self.D_y,
             self.Q_x, self.Q_y, *detuners)
+            
+        if not hasattr(self, 'name'):
+			self.name = ['P_%d'%ip for ip in xrange(self.n_segments)]			
+        self.name.append('end_ring')
+        
+        
+        for i_seg, m in enumerate(self.transverse_map):
+			m.s0 = self.s[i_seg]
+			m.s1 = self.s[i_seg+1]
+			m.name0 = self.name[i_seg]
+			m.name1 = self.name[i_seg+1]
 
     def create_longitudinal_map(self, one_turn_map_insert_idx=0):
         if self.longitudinal_focusing == 'linear':
