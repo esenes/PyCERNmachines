@@ -252,12 +252,14 @@ class LHC(Synchrotron):
     def __init__(self, *args, **kwargs):
 
         if 'n_segments' not in kwargs.keys():
-            raise ValueError('Number of segments must be specified')
+			self.n_segments = len(kwargs['s'])-1
+        else:
+			self.n_segments = kwargs['n_segments']
 
         if 'machine_configuration' not in kwargs.keys():
             raise ValueError('machine_configuration must be specified')
 
-        self.n_segments = kwargs['n_segments']
+        
         self.machine_configuration = kwargs['machine_configuration']
 
         self.circumference  = 26658.883
