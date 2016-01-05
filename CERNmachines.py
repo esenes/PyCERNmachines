@@ -355,6 +355,41 @@ class LHC(Synchrotron):
 
             self.longitudinal_focusing = 'non-linear'
 
+        elif self.machine_configuration == '3.5TeV':
+            # as in 2010...
+            self.charge = e
+            self.mass = m_p
+
+            self.gamma = np.sqrt( (3500e9*e/(self.mass*c**2))**2 + 1 )
+
+            self.Q_x     = 64.28
+            self.Q_y     = 59.31
+
+            self.alpha_x = 0 * np.ones(self.n_segments + 1)
+            self.beta_x  = self.R/self.Q_x * np.ones(self.n_segments + 1)
+            self.D_x     = 0 * np.ones(self.n_segments + 1)
+            self.alpha_y = 0 * np.ones(self.n_segments + 1)
+            self.beta_y  = self.R/self.Q_y * np.ones(self.n_segments + 1)
+            self.D_y     = 0 * np.ones(self.n_segments + 1)
+
+            self.Qp_x    = 0
+            self.Qp_y    = 0
+
+            self.app_x   = 0.0000e-9
+            self.app_y   = 0.0000e-9
+            self.app_xy  = 0
+
+            self.alpha       = 3.225e-4
+            self.h1          = 35640
+            self.h2          = 71280
+            self.V1          = 8e6
+            self.V2          = 0
+            self.dphi1       = 0
+            self.dphi2       = np.pi
+            self.p_increment = 0 * e/c * self.circumference/(self.beta*c)
+
+            self.longitudinal_focusing = 'non-linear'
+
         elif self.machine_configuration == '6.5TeV':
             self.charge = e
             self.mass = m_p
