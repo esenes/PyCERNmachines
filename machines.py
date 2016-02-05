@@ -143,10 +143,10 @@ class Synchrotron(Element):
             )
 
         self.transverse_map = TransverseMap(
-            self.circumference, self.s,
+            self.s,
             self.alpha_x, self.beta_x, self.D_x,
             self.alpha_y, self.beta_y, self.D_y,
-            self.Q_x, self.Q_y, *detuners)
+            self.Q_x, self.Q_y, detuners)
 
     def create_longitudinal_map(self, one_turn_map_insert_idx=0):
         if self.longitudinal_focusing == 'linear':
