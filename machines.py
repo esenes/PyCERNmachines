@@ -146,7 +146,7 @@ class Synchrotron(Element):
             self.s,
             self.alpha_x, self.beta_x, self.D_x,
             self.alpha_y, self.beta_y, self.D_y,
-            self.Q_x, self.Q_y, detuners)
+            self.Q_x, self.Q_y, detuners, printer=self.printer)
 
     def create_longitudinal_map(self, one_turn_map_insert_idx=0):
         if self.longitudinal_focusing == 'linear':
@@ -235,7 +235,7 @@ class Synchrotron(Element):
                 alpha_y=self.alpha_y[0], beta_y=self.beta_y[0], D_y=self.D_y[0],
                 distribution_z=gen.RF_bucket_distribution(
                     rfbucket=self.longitudinal_map.get_bucket(gamma=self.gamma),
-                    sigma_z=sigma_z, epsn_z=epsn_z)
+                    sigma_z=sigma_z, epsn_z=epsn_z, printer=self.printer)
                 ).generate()
 
         return bunch
