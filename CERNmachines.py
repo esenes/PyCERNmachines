@@ -139,6 +139,9 @@ class PS(Synchrotron):
         self.circumference = 100*2*np.pi
         self.s = np.arange(0, self.n_segments + 1) * self.circumference / self.n_segments
         if machine_configuration == 'LHCbeam_h7':
+            self.charge = e
+            self.mass = m_p
+
             self.alpha_x        = 0 * np.ones(self.n_segments)
             self.beta_x         = 16 * np.ones(self.n_segments)
             self.D_x            = 0 * np.ones(self.n_segments)
@@ -158,6 +161,9 @@ class PS(Synchrotron):
             self.dphi1, self.dphi2 = 0, 0
             self.p_increment       = 0 * e/c * self.circumference/(self.beta*c)
         elif machine_configuration =='TOFbeam_transition':
+            self.charge = e
+            self.mass = m_p
+
             self.alpha_x        = 0 * np.ones(self.n_segments)
             self.beta_x         = 16 * np.ones(self.n_segments)
             self.D_x            = 0 * np.ones(self.n_segments)
