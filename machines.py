@@ -162,7 +162,9 @@ class Synchrotron(Element):
                 [self.V1, self.V2], [self.dphi1, self.dphi2],
                 [self.alpha], self.gamma, self.p_increment,
                 D_x=self.D_x[one_turn_map_insert_idx],
-                D_y=self.D_y[one_turn_map_insert_idx]
+                D_y=self.D_y[one_turn_map_insert_idx],
+                charge=self.charge,
+                mass=self.mass,
             )
         else:
             raise NotImplementedError(
