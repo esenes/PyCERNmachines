@@ -28,6 +28,8 @@ class Synchrotron(Element):
         s == circumference/2, which is correct for the smoothip
         approximation.
         '''
+        super(Synchrotron, self).__init__(*args, **kwargs)
+
         self.chromaticity_on = kwargs.pop('chromaticity_on', True)
         self.amplitude_detuning_on = kwargs.pop('amplitude_detuning_on', True)
 
