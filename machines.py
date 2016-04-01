@@ -28,6 +28,8 @@ class Synchrotron(Element):
         s == circumference/2, which is correct for the smoothip
         approximation.
         '''
+        super(Synchrotron, self).__init__(*args, **kwargs)
+
         self.chromaticity_on = kwargs.pop('chromaticity_on', True)
         self.amplitude_detuning_on = kwargs.pop('amplitude_detuning_on', True)
 
@@ -146,7 +148,7 @@ class Synchrotron(Element):
             self.s,
             self.alpha_x, self.beta_x, self.D_x,
             self.alpha_y, self.beta_y, self.D_y,
-            self.Q_x, self.Q_y, detuners, printer=self.printer)
+            self.Q_x, self.Q_y, detuners, printer=self._printer)
 
     def create_longitudinal_map(self, one_turn_map_insert_idx=0):
         if self.longitudinal_focusing == 'linear':
@@ -235,7 +237,7 @@ class Synchrotron(Element):
                 alpha_y=self.alpha_y[0], beta_y=self.beta_y[0], D_y=self.D_y[0],
                 distribution_z=gen.RF_bucket_distribution(
                     rfbucket=self.longitudinal_map.get_bucket(gamma=self.gamma),
-                    sigma_z=sigma_z, epsn_z=epsn_z, printer=self.printer)
+                    sigma_z=sigma_z, epsn_z=epsn_z, printer=self._printer)
                 ).generate()
 
         return bunch

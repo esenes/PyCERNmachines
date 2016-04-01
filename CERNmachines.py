@@ -4,6 +4,7 @@ import numpy as np
 from scipy.constants import c, e, m_p
 
 from machines import Synchrotron
+import SPS.SPSOctupoles as SPSOctupoles
 
 
 class PSB(Synchrotron):
@@ -124,8 +125,10 @@ class PSB(Synchrotron):
             self.p_increment = 0 * e/c * self.circumference/(self.beta*c)
 
             self.longitudinal_focusing = 'non-linear'
+
         else:
-            raise ValueError('Unknown configuration '+self.machine_configuration)
+            raise ValueError('ERROR: unknown machine configuration ' +
+                             self.machine_configuration)
 
         super(PSB, self).__init__(*args, **kwargs)
 
@@ -189,7 +192,8 @@ class PS(Synchrotron):
             self.p_increment       = 46e9 * e/c * self.circumference/(self.beta*c)
 
         else:
-            raise ValueError('ERROR: unknown machine configuration', machine_configuration)
+            raise ValueError('ERROR: unknown machine configuration ' +
+                             self.machine_configuration)
         super(PS, self).__init__(*args, **kwargs)
 
 
@@ -202,6 +206,13 @@ class SPS(Synchrotron):
 
         if 'machine_configuration' not in kwargs.keys():
             raise ValueError('machine_configuration must be specified')
+
+        if 'octupole_settings_dict' not in kwargs:
+            kwargs['octupole_settings_dict'] = dict(
+                KLOF=0.,
+                KLOD=0.,
+                dp_offset=0.
+            )
 
         self.n_segments = kwargs['n_segments']
         self.machine_configuration = kwargs['machine_configuration']
@@ -226,8 +237,8 @@ class SPS(Synchrotron):
             self.Q_x            = 20.13
             self.Q_y            = 20.18
 
-            self.Qp_x           = 0
-            self.Qp_y           = 0
+            self.Qp_x           = [ 0. ]
+            self.Qp_y           = [ 0. ]
 
             self.app_x          = 0.0000e-9
             self.app_y          = 0.0000e-9
@@ -240,6 +251,8 @@ class SPS(Synchrotron):
             self.p_increment       = 0 * e/c * self.circumference/(self.beta*c)
 
             self.longitudinal_focusing = 'non-linear'
+
+            self.add_effect_of_octupoles(kwargs, optics='Q20')
 
         elif self.machine_configuration =='Q26-injection':
             self.charge = e
@@ -257,8 +270,8 @@ class SPS(Synchrotron):
             self.Q_x            = 26.13
             self.Q_y            = 26.18
 
-            self.Qp_x           = 0
-            self.Qp_y           = 0
+            self.Qp_x           = [ 0. ]
+            self.Qp_y           = [ 0. ]
 
             self.app_x          = 0.0000e-9
             self.app_y          = 0.0000e-9
@@ -271,6 +284,8 @@ class SPS(Synchrotron):
             self.p_increment       = 0 * e/c * self.circumference/(self.beta*c)
 
             self.longitudinal_focusing = 'non-linear'
+
+            self.add_effect_of_octupoles(kwargs, optics='Q26')
 
         elif self.machine_configuration == 'Q20-flattop':
             self.charge = e
@@ -288,8 +303,8 @@ class SPS(Synchrotron):
             self.Q_x            = 20.13
             self.Q_y            = 20.18
 
-            self.Qp_x           = 0
-            self.Qp_y           = 0
+            self.Qp_x           = [ 0. ]
+            self.Qp_y           = [ 0. ]
 
             self.app_x          = 0.0000e-9
             self.app_y          = 0.0000e-9
@@ -303,12 +318,25 @@ class SPS(Synchrotron):
 
             self.longitudinal_focusing = 'non-linear'
 
+            self.add_effect_of_octupoles(kwargs, optics='Q20')
+
         else:
-            raise ValueError('ERROR: unknown machine configuration',
-                             machine_configuration)
+            raise ValueError('ERROR: unknown machine configuration ' +
+                             self.machine_configuration)
+
+        for k in ['app_x', 'app_y', 'app_xy']:
+            if k in kwargs.keys():
+                kwargs[k] += getattr(self, k)
 
         super(SPS, self).__init__(*args, **kwargs)
 
+    def add_effect_of_octupoles(self, kwargs, optics):
+        if 'octupole_settings_dict' in kwargs.keys():
+            octupoles = SPSOctupoles.SPSOctupoles(optics)
+            KLOF = kwargs['octupole_settings_dict']['KLOF']
+            KLOD = kwargs['octupole_settings_dict']['KLOD']
+            dp_offset = kwargs['octupole_settings_dict']['dp_offset']
+            octupoles.apply_to_machine(self, KLOF, KLOD, dp_offset)
 
 class LHC(Synchrotron):
 
@@ -430,6 +458,10 @@ class LHC(Synchrotron):
 
             self.longitudinal_focusing = 'non-linear'
 
+        else:
+            raise ValueError('ERROR: unknown machine configuration ' +
+                             self.machine_configuration)
+
         i_focusing = kwargs.pop('i_focusing', False)
         i_defocusing = kwargs.pop('i_defocusing', False)
         if i_focusing or i_defocusing is True:
@@ -533,6 +565,10 @@ class HLLHC(Synchrotron):
             self.p_increment = 0 * e/c * self.circumference/(self.beta*c)
 
             self.longitudinal_focusing = 'non-linear'
+
+        else:
+            raise ValueError('ERROR: unknown machine configuration ' +
+                             self.machine_configuration)
 
         i_focusing = kwargs.pop('i_focusing', False)
         i_defocusing = kwargs.pop('i_defocusing', False)
