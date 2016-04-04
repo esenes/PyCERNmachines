@@ -32,13 +32,13 @@ class SPSOctupoles(object):
     def get_anharmonicities(self, KLOF, KLOD, p0):
         ''' p0 must be passed for correct scaling of the anharmonicities to
         match the PyHEADTAIL convention (see detuner module, amplitude
-        detuning segments). '''
-        axx = p0 * (self.coeffs['daxx_f'] * KLOF +
-                    self.coeffs['daxx_d'] * KLOD)
-        axy = p0 * (self.coeffs['daxy_f'] * KLOF +
-                    self.coeffs['daxy_d'] * KLOD)
-        ayy = p0 * (self.coeffs['dayy_f'] * KLOF +
-                    self.coeffs['dayy_d'] * KLOD)
+        detuning segments). Factor 2 is needed to match PyHT convention.'''
+        axx = 2. * p0 * (self.coeffs['daxx_f'] * KLOF +
+                         self.coeffs['daxx_d'] * KLOD)
+        axy = 2. * p0 * (self.coeffs['daxy_f'] * KLOF +
+                         self.coeffs['daxy_d'] * KLOD)
+        ayy = 2. * p0 * (self.coeffs['dayy_f'] * KLOF +
+                         self.coeffs['dayy_d'] * KLOD)
 
         return axx, axy, ayy
 
