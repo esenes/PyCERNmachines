@@ -212,7 +212,7 @@ class Synchrotron(Element):
 
     def generate_6D_Gaussian_bunch_matched(
             self, n_macroparticles, intensity, epsn_x, epsn_y,
-            sigma_z=None, epsn_z=None):
+            sigma_z=None, epsn_z=None, margin=0):
         '''Generate a 6D Gaussian distribution of particles which is
         transversely as well as longitudinally matched.
         The distribution is found iteratively to exactly yield the
@@ -237,7 +237,8 @@ class Synchrotron(Element):
                 alpha_y=self.alpha_y[0], beta_y=self.beta_y[0], D_y=self.D_y[0],
                 distribution_z=gen.RF_bucket_distribution(
                     rfbucket=self.longitudinal_map.get_bucket(gamma=self.gamma),
-                    sigma_z=sigma_z, epsn_z=epsn_z, printer=self._printer)
+                    sigma_z=sigma_z, epsn_z=epsn_z, margin=margin,
+                    printer=self._printer)
                 ).generate()
 
         return bunch
