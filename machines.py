@@ -5,18 +5,18 @@ from scipy.constants import c, e, m_p
 
 from PyHEADTAIL.general.element import Element
 import PyHEADTAIL.particles.generators as gen
-try:
-    from PyHEADTAIL.trackers.transverse_tracking_cython import TransverseMap
-    from PyHEADTAIL.trackers.detuners_cython import (Chromaticity,
-                                                     AmplitudeDetuning)
-except ImportError as e:
-    print ("*** Warning: could not import cython variants of trackers, "
-           "did you cythonize (use the following command)?\n"
-           "$ ./install \n"
-           "Falling back to (slower) python version.")
-    from PyHEADTAIL.trackers.transverse_tracking import TransverseMap
-    from PyHEADTAIL.trackers.detuners import Chromaticity, AmplitudeDetuning
-from PyHEADTAIL.trackers.simple_long_tracking import LinearMap, RFSystems
+# try:
+#     from PyHEADTAIL.trackers.transverse_tracking_cython import TransverseMap
+#     from PyHEADTAIL.trackers.detuners_cython import (Chromaticity,
+#                                                      AmplitudeDetuning)
+# except ImportError as e:
+#     print ("*** Warning: could not import cython variants of trackers, "
+#            "did you cythonize (use the following command)?\n"
+#            "$ ./install \n"
+#            "Falling back to (slower) python version.")
+from PyHEADTAIL.trackers.transverse_tracking import TransverseMap
+from PyHEADTAIL.trackers.detuners import Chromaticity, AmplitudeDetuning
+from PyHEADTAIL.trackers.longitudinal_tracking import LinearMap, RFSystems
 
 
 class Synchrotron(Element):
