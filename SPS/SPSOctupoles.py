@@ -42,6 +42,15 @@ class SPSOctupoles(object):
 
         return axx, axy, ayy
 
+    def get_anharmonicities_MAD(self, KLOF, KLOD):
+        ''' Different convention compared to PyHEADTAIL ... No need to pass
+        p0 nor having the factor 2. MAD uses axx = dQx / d2Jx, etc ... '''
+        axx = self.coeffs['daxx_f'] * KLOF + self.coeffs['daxx_d'] * KLOD
+        axy = self.coeffs['daxy_f'] * KLOF + self.coeffs['daxy_d'] * KLOD
+        ayy = self.coeffs['dayy_f'] * KLOF + self.coeffs['dayy_d'] * KLOD
+
+        return axx, axy, ayy
+
     def get_q2(self, KLOF, KLOD):
         q2x = self.coeffs['d_q2x_f'] * KLOF + self.coeffs['d_q2x_d'] * KLOD
         q2y = self.coeffs['d_q2y_f'] * KLOF + self.coeffs['d_q2y_d'] * KLOD
