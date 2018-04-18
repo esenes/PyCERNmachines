@@ -163,6 +163,28 @@ class PS(Synchrotron):
             self.V1, self.V2       = 24e3, 0
             self.dphi1, self.dphi2 = 0, 0
             self.p_increment       = 0 * e/c * self.circumference/(self.beta*c)
+        elif machine_configuration =='BCMS_h9':
+            self.charge = e
+            self.mass = m_p
+
+            self.alpha_x        = 0 * np.ones(self.n_segments)
+            self.beta_x         = 16 * np.ones(self.n_segments)
+            self.D_x            = 0 * np.ones(self.n_segments)
+            self.alpha_y        = 0 * np.ones(self.n_segments)
+            self.beta_y         = 16 * np.ones(self.n_segments)
+            self.D_y            = 0 * np.ones(self.n_segments)
+            self.Q_x            = 6.27
+            self.Q_y            = 6.23
+            self.Qp_x           = 0
+            self.Qp_y           = 0
+            self.app_x          = 0.0000e-9
+            self.app_y          = 0.0000e-9
+            self.app_xy         = 0
+            self.alpha     = 0.027
+            self.h1, self.h2       = 9, 0
+            self.V1, self.V2       = 20e3, 0
+            self.dphi1, self.dphi2 = 0, 0
+            self.p_increment       = 0 * e/c * self.circumference/(self.beta*c)
         elif machine_configuration =='TOFbeam_transition':
             self.charge = e
             self.mass = m_p

@@ -18,6 +18,9 @@ from PyHEADTAIL.trackers.transverse_tracking import TransverseMap
 from PyHEADTAIL.trackers.detuners import Chromaticity, AmplitudeDetuning
 from PyHEADTAIL.trackers.longitudinal_tracking import LinearMap, RFSystems
 
+from PyHEADTAIL.particles.rfbucket_matching import ParabolicDistribution
+
+
 
 class Synchrotron(Element):
 
@@ -238,6 +241,34 @@ class Synchrotron(Element):
                 distribution_z=gen.RF_bucket_distribution(
                     rfbucket=self.longitudinal_map.get_bucket(gamma=self.gamma),
                     sigma_z=sigma_z, epsn_z=epsn_z, margin=margin,
+                    printer=self._printer)
+                ).generate()
+
+        return bunch
+
+    def generate_6D_Gaussian_bunch_matched_parabolic(
+            self, n_macroparticles, intensity, epsn_x, epsn_y,
+            sigma_z=None, epsn_z=None, margin=0):
+        '''
+        Modified version to use parabolic longitudinal profile
+        instead of the gaussian one
+
+        Added 06.04.2018
+        '''
+        assert self.longitudinal_focusing == 'non-linear'
+        epsx_geo = epsn_x/self.betagamma
+        epsy_geo = epsn_y/self.betagamma
+
+        bunch = gen.ParticleGenerator(macroparticlenumber=n_macroparticles,
+                intensity=intensity, charge=self.charge, mass=self.mass,
+                circumference=self.circumference, gamma=self.gamma,
+                distribution_x=gen.gaussian2D(epsx_geo),
+                alpha_x=self.alpha_x[0], beta_x=self.beta_x[0], D_x=self.D_x[0],
+                distribution_y=gen.gaussian2D(epsy_geo),
+                alpha_y=self.alpha_y[0], beta_y=self.beta_y[0], D_y=self.D_y[0],
+                distribution_z=gen.RF_bucket_distribution(
+                    rfbucket=self.longitudinal_map.get_bucket(gamma=self.gamma),
+                    distribution_type=ParabolicDistribution, sigma_z=sigma_z, epsn_z=epsn_z, margin=margin,
                     printer=self._printer)
                 ).generate()
 
